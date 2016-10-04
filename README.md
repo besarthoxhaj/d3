@@ -15,6 +15,125 @@ On topography:
 
 > From the Greek τόπος (topos, "place") and -γραφία (-graphia, "writing"). Topography is the study of the shape and features of the surface of the Earth and other observable astronomical objects including planets, moons, and asteroids. The topography of an area could refer to the surface shapes and features themselves, or a description (especially their depiction in maps).
 
+- [Raw api](https://github.com/d3/d3-geo)
+- [More than you ever wanted to know about GeoJSON](http://www.macwright.org/2015/03/23/geojson-second-bite.html)
+- [Official spec](https://tools.ietf.org/html/rfc7946)
+
+**[Position]()**
+```
+[longitude,latitude,elevation]
+
+longitude https://media1.britannica.com/eb-media/06/64906-004-55117002.jpg
+  - are known as medidians (Greenwich)
+  - run in a north-south direction
+  - measure distance east or west of the prime meridian
+  - are farthest apart at the Equator and meet at the poles
+  - cross the Equator at right angles
+  - lie in planes that pass through the Earth's axis
+  - are equal in length
+  - are halves of great circles
+
+latitude https://media1.britannica.com/eb-media/07/64907-004-870197D7.jpg
+  - are known as parallels
+  - run in an east-west direction
+  - measure distance north or south from the Equator
+  - are parallel to one another and never meet
+  - cross the prime meridian at right angles
+  - lie in planes that cross the Earth's axis at right angles
+  - get shorter toward the poles, with only the Equator, the longest, a great circle
+```
+
+**[Geometry:Points]()**
+
+```js
+// with a single position, we can make the simplest geometry: the point.
+{
+  'type':'Point',
+  'coordinates':[0,0]
+}
+```
+
+**[Geometry:LineStrings]()**
+
+```js
+// to represent a line, you’ll need at least two places to connect.
+{
+  'type':'LineString',
+  'coordinates':[[0, 0],[10,10]]
+}
+```
+
+**[Geometry:Polygons]()**
+
+```js
+// to represent a line, you’ll need at least two places to connect.
+{
+  'type':'Polygon',
+  'coordinates':[
+    [
+      [0,0],[10,10],[10,0],[0,0]
+    ]
+  ]
+}
+```
+
+**[Features]()**
+
+```js
+// features are this combination of geometry and properties.
+{
+  'type':'Feature',
+  'geometry':{
+    'type':'Point',
+    'coordinates':[0,0]
+  },
+  'properties':{
+    'name':'null island'
+  }
+}
+```
+
+**[Multi Geometries]()**
+
+```js
+{
+  'type':'Feature',
+  'geometry':{
+    'type':'GeometryCollection',
+    'geometries':[{
+      'type':'Point',
+      'coordinates':[0,0]
+    },{
+      'type':'LineString',
+      'coordinates':[[0,0],[1,0]]
+    }]
+  },
+  'properties':{
+  'name':'null island'
+  }
+}
+```
+
+**[FeatureCollection]()**
+```js
+{
+  'type':'FeatureCollection',
+  'features':[{
+    'type':'Feature',
+    'geometry':{
+      'type':'Point',
+      'coordinates':[0,0]
+    },
+    'properties':{
+      'name':'null island'
+    }
+  }]
+}
+```
+
+**[Projections]()**
+
+
 ## Links
 
 [Cartograms with d3 & TopoJSON](http://prag.ma/code/d3-cartogram/#popchange/2011) with [cartogram.js](http://prag.ma/code/d3-cartogram/cartogram.js).
@@ -29,7 +148,7 @@ On topography:
 
 [Interactive Data Visualization for the Web](http://alignedleft.com/tutorials/d3/)
 
-## Concepts
+## Concepts and APIs
 
 These are some fundamental concepts of D3.
 
@@ -82,7 +201,6 @@ d3.select('body')
   .enter().append('p')
   .text(d => `I’m number ${d}!`);
 ```
-
 
 **[Transitions](https://github.com/d3/d3-transition/blob/master/README.md)**
 > Transitions gradually interpolate styles and attributes over time [...] D3’s interpolators support both primitives, such as numbers and numbers embedded within strings (font sizes, path data, etc.), and compound values. You can even extend D3’s interpolator registry to support complex properties and data structures.
