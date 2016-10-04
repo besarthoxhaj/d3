@@ -1,0 +1,23 @@
+{
+  "name": "learn-d3",
+  "version": "1.0.0",
+  "description": "What's the difference between [TopoJSON](https://github.com/mbostock/topojson/wiki) and [GeoJSON](http://geojson.org/)? > If you care about file size or topology, then use TopoJSON. If you don’t care about either, then use GeoJSON for simplicity’s sake.",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server -p 8008 &",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/besarthoxhaj/learn-d3.git"
+  },
+  "author": "Bes",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/besarthoxhaj/learn-d3/issues"
+  },
+  "homepage": "https://github.com/besarthoxhaj/learn-d3#readme",
+  "dependencies": {
+    "http-server": "^0.9.0"
+  }
+}
