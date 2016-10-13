@@ -3,7 +3,7 @@
 What's the difference between [TopoJSON](https://github.com/mbostock/topojson/wiki) and [GeoJSON](http://geojson.org/)?
 > If you care about file size or topology, then use TopoJSON. If you don’t care about either, then use GeoJSON for simplicity’s sake.
 
-What's topology? Is the same as topography?
+What's [topology](https://en.wikipedia.org/wiki/Topology)? Is the same as [topography](https://en.wikipedia.org/wiki/Topography)?
 
 > Topology (from the Greek τόπος, “place”, and λόγος, “study”) is a major area of mathematics concerned with spatial properties that are preserved under continuous deformations of objects, for example, deformations that involve stretching, but no tearing or gluing. It emerged through the development of concepts from geometry and set theory, such as space, dimension, and transformation.
 
@@ -11,13 +11,34 @@ more...
 
 > [...] in the world of topology, a doughnut and coffee cup are the same, since both are three dimensional objects with a hole going through them. Similarly, two adjacent polygons that share a common border will still share a common border even if the border is bent or distorted.
 
-On topography:
+On [topography](https://en.wikipedia.org/wiki/Topology):
 
 > From the Greek τόπος (topos, "place") and -γραφία (-graphia, "writing"). Topography is the study of the shape and features of the surface of the Earth and other observable astronomical objects including planets, moons, and asteroids. The topography of an area could refer to the surface shapes and features themselves, or a description (especially their depiction in maps).
 
-- [Raw api](https://github.com/d3/d3-geo)
+On map [projections](https://en.wikipedia.org/wiki/Map_projection)):
+
+> [...] is a systematic transformation of the latitudes and longitudes of locations on the surface of a sphere or an ellipsoid into locations on a plane [...] any mathematical function transforming coordinates from the curved surface to the plane is a projection. Carl Friedrich Gauss's Theorema Egregium proved that a sphere's surface cannot be represented on a plane without distortion.
+
+- [Raw api d3-geo](https://github.com/d3/d3-geo)
 - [More than you ever wanted to know about GeoJSON](http://www.macwright.org/2015/03/23/geojson-second-bite.html)
 - [Official spec](https://tools.ietf.org/html/rfc7946)
+
+**Drawing**
+
+D3 makes extensive use of Scalable Vector Graphics (SVG). You can find more at https://www.w3.org/TR/SVG11/. Worth noting that there are some SVG implementation version for mobile.
+
+For more about SVG check https://developer.mozilla.org/en-US/docs/Web/SVG.
+
+The coordinate system is this:
+![svg-coordinate-system](/images/svg-coordinate-system.png)
+
+```html
+<svg>
+<g>
+<d>
+<path>
+<!-- ... -->
+```
 
 **[Position]()**
 ```
@@ -43,6 +64,19 @@ latitude https://media1.britannica.com/eb-media/07/64907-004-870197D7.jpg
   - get shorter toward the poles, with only the Equator, the longest, a great circle
 ```
 
+**[GeoJSON]()**
+
+GeoJSON always consists of a single object, this object may represents either a `Geometry`, `Feature` or `Collection of Features`.
+Let's look at them:
+
+```js
+// a Geometry is always:
+{
+  type:@String // -> ['Point','MultiPoint','LineString','MultiLineString','Polygon','MultiPolygon','GeometryCollection']
+  coordinates:@Array
+}
+```
+
 **[Geometry:Points]()**
 
 ```js
@@ -59,7 +93,7 @@ latitude https://media1.britannica.com/eb-media/07/64907-004-870197D7.jpg
 // to represent a line, you’ll need at least two places to connect.
 {
   'type':'LineString',
-  'coordinates':[[0, 0],[10,10]]
+  'coordinates':[[0,0],[10,10]]
 }
 ```
 
@@ -83,13 +117,8 @@ latitude https://media1.britannica.com/eb-media/07/64907-004-870197D7.jpg
 // features are this combination of geometry and properties.
 {
   'type':'Feature',
-  'geometry':{
-    'type':'Point',
-    'coordinates':[0,0]
-  },
-  'properties':{
-    'name':'null island'
-  }
+  'geometry':@Geometry,
+  'properties':@Object|null
 }
 ```
 
@@ -118,35 +147,93 @@ latitude https://media1.britannica.com/eb-media/07/64907-004-870197D7.jpg
 ```js
 {
   'type':'FeatureCollection',
-  'features':[{
-    'type':'Feature',
-    'geometry':{
-      'type':'Point',
-      'coordinates':[0,0]
-    },
-    'properties':{
-      'name':'null island'
-    }
-  }]
+  'features':[@Feature]
 }
 ```
 
 **[Projections]()**
 
+Projections are function who maps spherical coordinates to one another set of coordinates in a two dimensional plane (projected coordinates).
+
+```js
+// Albers projection
+var albersProj = d3.geoAlbers();
+var london = [‎-0.118092,‎51.509865];
+albersProj(london); // [1447.4743359084398,-518.063483693071]
+```
+
+**[Paths](https://github.com/d3/d3-path)**
+
+```js
+// https://d3js.org/d3-path.v1.min.js
+
+```
+
+**[Geo Paths]()**
+
+```js
+var renderPath = d3.getPath()
+  .projection(d3.geoAlbers());
+```
+
+**[Put it together]()**
+
+```js
+d3.select('body')
+  .append('svg')
+  .attr('width',width)
+  .attr('height',height)
+  .append('g')
+  .selectAll('path')
+  .data(/* GeoJSON */)
+  .enter()
+  .append('path')
+  .attr('fill','#ccc')
+  .attr('d',d3.getPath().projection(d3.geoAlbers()))
+```
+
+
+
+## Super simple examples
+
+```js
+var line = {
+  'type':'LineString',
+  'coordinates':[
+    [-4.1397,50.3706],
+    [-43.2436,-22.9083],
+    [-67.2717,-55.9797],
+    [-149.4500,-17.6667],
+    [172.1936,-41.4395],
+    [151.1667,-34],
+    [147.70,-18.3],
+    [106.7,-6],
+    [18.4719,-34.3],
+    [-5,-15],
+    [-25.6,37.7],
+    [-4.1397,50.3706]
+  ]
+};
+```
 
 ## Links
 
 [Cartograms with d3 & TopoJSON](http://prag.ma/code/d3-cartogram/#popchange/2011) with [cartogram.js](http://prag.ma/code/d3-cartogram/cartogram.js).
 ![us-by-population-growth](/images/carto.png)
+[Tutorial from Maptime Seattle](http://maptimesea.github.io/2015/01/07/d3-mapping.html)
 
 ## Tools
 
 [GDAL - Geospatial Data Abstraction Library](http://www.gdal.org/index.html)
 > GDAL is a translator library for raster and vector geospatial data formats that is released under an X/MIT style Open Source license by the Open Source Geospatial Foundation.
 
+[GeoJSONLint](http://geojsonlint.com/)
+https://www.dashingd3js.com/
+
 ## Tutorials
 
 [Interactive Data Visualization for the Web](http://alignedleft.com/tutorials/d3/)
+[Drawing with GeoJSON](http://mikefowler.me/2014/06/10/drawing-geojson-in-a-canvas/)
 
 ## Concepts and APIs
 

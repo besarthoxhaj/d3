@@ -1,4 +1,4 @@
-{
+var ukData = {
   "type":"Topology",
   "objects":{
     "subunits":{
@@ -28,6 +28,18 @@
         "properties":{"name":"Wales"},
         "id":"WLS",
         "arcs":[[[67]],[[-7,68]],[[69]]]
+      }]
+    },
+    "places":{
+      "type":"GeometryCollection",
+      "geometries":[{
+        "type":"Point",
+        "properties":{"name":"Glasgow"},
+        "coordinates":[6104,5454]
+      },{
+        "type":"Point",
+        "properties":{"name":"London"},
+        "coordinates":[8777,1456]
       }]
     }
   },
