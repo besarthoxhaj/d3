@@ -1,182 +1,93 @@
 <!DOCTYPE html>
 <meta charset='utf-8'>
 <style>
-  .subunit.SCT {fill:#ddc;}
-  .subunit.WLS {fill:#cdd;}
-  .subunit.NIR {fill:#cdc;}
-  .subunit.ENG {fill:#dcd;}
-  .subunit.IRL {display:none;}
-
-  .subunit-boundary {
+  .graticule {
     fill:none;
     stroke:#777;
-    stroke-dasharray:2,2;
-    stroke-linejoin:round;
+    stroke-width:.5px;
+    stroke-opacity:.5;
   }
-
-  .subunit-boundary.IRL {
-    stroke:#aaa;
+  .container {
+    display:flex;
+    flex-direction:row;
   }
-
-  .subunit-label {
-    fill:#777;
-    fill-opacity:.5;
-    font-size:20px;
-    font-weight:300;
-    text-anchor:middle;
-  }
-
-  .blood {
-    fill:none;
-    stroke:red;
-    stroke-width:5;
-  }
-
-  .graticule {
-    fill: none;
-    stroke: #777;
-    stroke-width: .5px;
-    stroke-opacity: .5;
+  .inputContainer {
+    display:flex;
+    width:250px;
+    flex-direction:column;
   }
 </style>
 <body>
-  <!-- <script src='//d3js.org/d3.v3.min.js' charset='utf-8'></script> -->
+  <div class='container'>
+    <div class='inputContainer'>
+      <span>Scale</span>
+      <input id='scale' type='number' placeholder='scale (100)' value='100'>
+      <span>translateX</span>
+      <input id='translateX' type='number' placeholder='translate X (480)' value='480'>
+      <span>translateY</span>
+      <input id='translateY' type='number' placeholder='translate Y (250)' value='250'>
+      <span>centerLatitude</span>
+      <input id='centerLatitude' type='number' placeholder='center Latitude (38.7)' value='38.7'>
+      <span>centerLongitude</span>
+      <input id='centerLongitude' type='number' placeholder='center Longitude (-0.6)' value='-0.6'>
+      <span>rotateLamda</span>
+      <input id='rotateLamda' type='number' placeholder='rotate Lamda (96)' value='96'>
+      <span>rotatePhi</span>
+      <input id='rotatePhi' type='number' placeholder='rotate Phi (0)' value='0'>
+      <span>rotateGamma</span>
+      <input id='rotateGamma' type='number' placeholder='rotate Gamma (0)' value='0'>
+      <span>parallelX</span>
+      <input id='parallelX' type='number' placeholder='parallel X (29.5)' value='29.5'>
+      <span>parallelY</span>
+      <input id='parallelY' type='number' placeholder='parallel Y (45.5)' value='45.5'>
+    </div>
+  </div>
   <script src='https://d3js.org/d3.v4.min.js' charset='utf-8'></script>
   <script src='https://d3js.org/topojson.v1.min.js'></script>
-  <script src='data/uk.js'></script>
+  <script src='https://rawgit.com/besarthoxhaj/d3/master/data/uk.js'></script>
   <script>
+    var width = 650;
+    var height = 400;
 
-    var width = 1500;
-    var height = 1200;
-
-    var svg = d3.select('body').append('svg')
+    var svg = d3.select('.container').append('svg')
       .attr('width',width)
       .attr('height',height);
 
-    var projection = d3.geoAlbers().scale(250).translate([width/2,height/2]);
-    var graticule = d3.geoGraticule();
-    var path = d3.geoPath().projection(projection);
+    drawMap();
 
-    svg.append('path')
-      .datum(topojson.feature(ukData,ukData.objects.subunits))
-      .attr('d',path);
+    function drawMap() {
+      var scale = d3.select('#scale').node().value;
+      var translateY = d3.select('#translateY').node().value;
+      var translateX = d3.select('#translateX').node().value;
+      var centerLatitude = d3.select('#centerLatitude').node().value;
+      var centerLongitude = d3.select('#centerLongitude').node().value;
+      var rotateLamda = d3.select('#rotateLamda').node().value;
+      var rotatePhi = d3.select('#rotatePhi').node().value;
+      var rotateGamma = d3.select('#rotateGamma').node().value;
+      var parallelX = d3.select('#parallelX').node().value;
+      var parallelY = d3.select('#parallelY').node().value;
+      // draw -----------------------------------------------------------------
+      var projection = d3.geoAlbers()
+        .center([centerLongitude,centerLatitude])
+        .rotate([rotateLamda,rotatePhi,rotateGamma])
+        .parallels([parallelX,parallelY])
+        .scale(scale)
+        .translate([translateX,translateY]);
+      var graticule = d3.geoGraticule();
+      var path = d3.geoPath().projection(projection);
 
-    svg.append('path')
-      .datum(graticule)
-      .attr('class','graticule')
-      .attr('d',path);
+      d3.selectAll('path').remove();
 
-  // var projection = d3.geoAlbers()
-  	// .center([0,55.4])
-    // .rotate([4.4,0])
-    // .parallels([50,60])
-    // .scale(6000)
-    // .translate([300/2,300/2]);
+      svg.append('path')
+        .datum(topojson.feature(ukData,ukData.objects.subunits))
+        .attr('d',path);
 
-  // var line = {
-  //   'type':'LineString',
-  //   'coordinates':[
-  //     [-4.1397,50.3706],
-  //     [-43.2436,-22.9083],
-  //     [-4.1397,50.3706]
-  //   ]
-  // };
-  //
-  // svg.selectAll('.geojson').data([line])
-  //   .enter()
-  //   .append('path')
-  //   .attr('class','blood')
-  //   .attr('d',d3.geoPath().projection(projection));
+      svg.append('path')
+        .datum(graticule)
+        .attr('class','graticule')
+        .attr('d',path);
+    }
 
-  // var bodyElm = d3.select('body');
-  // function animate(elm,color) {
-  //   elm.transition()
-  //     .duration(700)
-  //     .style('background-color',color)
-  //     .on('end',() => animate(elm,(color==='white'?'black':'white')))
-  // }
-  // animate(bodyElm,'black');
-
-  // GeoJSON
-  // d3.json('data/uk.json', (error,uk) => {
-  //   console.log('error',error);
-  //   console.log('uk',uk);
-    // var subunits = topojson.feature(ukData,ukData.objects.subunits);
-    // d3.select('body')
-    //   .append('svg')
-    //   .attr('width',300)
-    //   .attr('height',300)
-    //   .append('g')
-    //   .selectAll('path')
-    //   .data(/* GeoJSON */)
-    //   .enter()
-    //   .append('path')
-    //   .attr('fill','#ccc')
-    //   .attr('d',d3.getPath().projection(d3.geoAlbers().center([0,55.4]).rotate([4.4,0]).parallels([50,60]).scale(6000).translate([300/2,300/2])))
-  // });
-
-
-  // var neighborhoods = svg.append('g');
-
-  // var width = 960;
-  // var height = 1160;
-  //
-  // var svg = d3.select('body').append('svg')
-  //   .attr('width',width)
-  //   .attr('height',height);
-  //
-  // d3.json('data/uk.json', (error,uk) => {
-  //   if (error) return console.error(error);
-  //   var subunits = topojson.feature(uk,uk.objects.subunits);
-  //   // var projection = d3.geo.mercator().scale(500).translate([width/2,height/2]);
-  //   var projection = d3.geo.albers()
-  //     .center([0,55.4])
-  //     .rotate([4.4,0])
-  //     .parallels([50,60])
-  //     .scale(6000)
-  //     .translate([width/2,height/2]);
-  //   var path = d3.geo.path().projection(projection);
-  //   svg.append('path').datum(subunits).attr('d',path);
-  //   svg.selectAll('.subunit')
-  //     .data(topojson.feature(uk,uk.objects.subunits).features)
-  //   .enter().append('path')
-  //     .attr('class',d => `subunit ${d.id}`)
-  //     .attr('d',path);
-  //
-  //   svg.append('path')
-  //     .datum(topojson.mesh(uk,uk.objects.subunits,(a,b) => a !== b && a.id !== 'IRL'))
-  //     .attr('d',path)
-  //     .attr('class','subunit-boundary');
-  //
-  //   svg.append('path')
-  //     .datum(topojson.mesh(uk,uk.objects.subunits,(a, b) => a === b && a.id === 'IRL'))
-  //     .attr('d',path)
-  //     .attr('class','subunit-boundary IRL');
-  //
-  //   svg.append('path')
-  //     .datum(topojson.feature(uk,uk.objects.places))
-  //     .attr('d',path)
-  //     .attr('class','place');
-  //
-  //   svg.selectAll('.place-label')
-  //     .data(topojson.feature(uk,uk.objects.places).features)
-  //   .enter().append('text')
-  //     .attr('class','place-label')
-  //     .attr('transform',d => `translate(${projection(d.geometry.coordinates)})`)
-  //     .attr('dy','.35em')
-  //     .text(d => d.properties.name);
-  //
-  //   svg.selectAll('.place-label')
-  //     .attr('x',d => d.geometry.coordinates[0] > -1 ? 6 : -6)
-  //     .style('text-anchor',d => d.geometry.coordinates[0] > -1 ? 'start' : 'end');
-  //
-  //   svg.selectAll('.subunit-label')
-  //     .data(topojson.feature(uk,uk.objects.subunits).features)
-  //   .enter().append('text')
-  //     .attr('class',d => `subunit-label ${d.id}`)
-  //     .attr('transform',d => `translate(${path.centroid(d)})`)
-  //     .attr('dy','.35em')
-  //     .text(d => d.properties.name);
-  // });
+    d3.selectAll('input').on('input',drawMap);
   </script>
 </body>

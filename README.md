@@ -164,8 +164,32 @@ albersProj(london); // [1447.4743359084398,-518.063483693071]
 
 **[Paths](https://github.com/d3/d3-path)**
 
+It's a function that returns a path. Check it out:
+
 ```js
 // https://d3js.org/d3-path.v1.min.js
+
+var geoJson = {
+  'type':'FeatureCollection',
+  'features':[{
+    'type':'Feature',
+    'properties':null,
+    'geometry':{
+      'type':'Polygon',
+      'coordinates':[[[0,0],[50,50],[50,0],[0,0]]]
+    }
+  }]
+};
+var path = d3.geoPath();
+var pathString = path(geoJson); // 'M0,0L50,50L50,0Z'
+
+// view it
+d3.select('body')
+  .append('svg')
+  .attr('width',200)
+  .attr('height',200)
+  .append('path')
+  .attr('d',pathString);
 
 ```
 

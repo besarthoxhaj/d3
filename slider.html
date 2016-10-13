@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<meta charset='utf-8'>
+<body>
+  <script src='https://d3js.org/d3.v4.min.js' charset='utf-8'></script>
+  <script>
+    function start() {
+      console.log('start');
+    }
+    function moving() {
+      console.log('moving');
+    }
+    function end() {
+      console.log('end');
+    }
+    var slider = d3.select('body').append('input').attr('type','range');
+    slider.on('input',function() {
+      console.log('event',+this.value);
+    });
+  </script>
+</body>
