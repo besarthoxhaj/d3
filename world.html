@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<meta charset='utf-8'>
+<style>
+  .graticule {
+    fill:none;
+    stroke:#777;
+    stroke-width:.5px;
+    stroke-opacity:.5;
+  }
+  .container {
+    display:flex;
+    flex-direction:row;
+  }
+  .inputContainer {
+    display:flex;
+    width:250px;
+    flex-direction:column;
+  }
+</style>
+<body>
+  <script src='https://d3js.org/d3.v4.min.js' charset='utf-8'></script>
+  <script src='https://d3js.org/topojson.v1.min.js'></script>
+  <script>
+    var width = 650;
+    var height = 400;
+
+    var svg = d3.select('body').append('svg')
+      .attr('width',width)
+      .attr('height',height);
+
+    d3.json('data/simple_topo_world.json', (error,world) => {
+      if(error) {
+        console.log('error',error);
+      }
+      var data = topojson.feature(world,world.objects.collection);
+      // var data = topojson.feature(world,world.objects.subunits);
+      // var data = world;
+      var projection = d3.geoAlbers()
+        .center([38.7,-0.6])
+        .rotate([96,0,0])
+        .parallels([29.5,45.5])
+        .scale(100)
+        .translate([480,250]);
+      var graticule = d3.geoGraticule();
+      var path = d3.geoPath().projection(projection);
+
+      svg.append('path')
+        .datum(data)
+        .attr('d',path);
+
+      // svg.append('path')
+      //   .datum(graticule)
+      //   .attr('class','graticule')
+      //   .attr('d',path);
+    });
+  </script>
+</body>
