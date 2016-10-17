@@ -162,5 +162,7 @@ To transform the shapefile into a GeoJSON or TopoJSON use `ogr2ogr`. An example:
 
 ```sh
 $ ogr2ogr -f GeoJSON output.json input.shp
-# Other options can be passed
+# Other options can be passed like -where
+# which allows to run SQL-like queries
+$ ogr2ogr -f GeoJSON -where "adm0_a3 = 'AFG'" output.json ne_110m_admin_0_countries.shp
 ```
