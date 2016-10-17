@@ -28,11 +28,11 @@
       .attr('width',width)
       .attr('height',height);
 
-    d3.json('data/simple_topo_world.json', (error,world) => {
+    d3.json('data/topo_world.json', (error,world) => {
       if(error) {
         console.log('error',error);
       }
-      var data = topojson.feature(world,world.objects.collection);
+      var data = topojson.feature(world,world.objects.countries);
       // var data = topojson.feature(world,world.objects.subunits);
       // var data = world;
       var projection = d3.geoAlbers()
