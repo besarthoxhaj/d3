@@ -121,3 +121,46 @@ var topoAruba = {
 
 ## TopoJson
 
+## Data and tools
+
+Lot's of data are available through [Natural Earth website](http://www.naturalearthdata.com/). The most common type is called [shapefile](https://en.wikipedia.org/wiki/Shapefile).
+
+The best way to interprete the data and manipulate them is through [ogr2ogr](http://www.gdal.org/ogr2ogr.html). Once installed it will make available to command lines `ogr2ogr` and `ogrinfo`.
+
+```sh
+# to get some help
+$ ogr2ogr --long-usage
+```
+
+To get the file data: `ogrinfo -al ne_110m_land.shp`. This will print to stdout the file content. Following an example of how it may look like.
+
+```sh
+$ ogrinfo -al ne_110m_admin_0_countries.shp
+INFO: Open of `ne_110m_admin_0_countries.shp'
+      using driver `ESRI Shapefile' successful.
+
+Layer name: ne_110m_admin_0_countries
+Geometry: Polygon
+Feature Count: 177
+Extent: (-180.000000, -90.000000) - (180.000000, 83.645130)
+Layer SRS WKT:
+GEOGCS["GCS_WGS_1984",
+    DATUM["WGS_1984",
+        SPHEROID["WGS_84",6378137.0,298.257223563]],
+    PRIMEM["Greenwich",0.0],
+    UNIT["Degree",0.0174532925199433]]
+scalerank: Integer (4.0)
+featurecla: String (30.0)
+labelrank: Real (16.6)
+sovereignt: String (254.0)
+sov_a3: String (254.0)
+adm0_dif: Real (16.6)
+# ...
+```
+
+To transform the shapefile into a GeoJSON or TopoJSON use `ogr2ogr`. An example:
+
+```sh
+$ ogr2ogr -f GeoJSON output.json input.shp
+# Other options can be passed
+```
