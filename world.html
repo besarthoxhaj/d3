@@ -21,6 +21,7 @@
   <script src='https://d3js.org/d3.v4.min.js' charset='utf-8'></script>
   <script src='https://d3js.org/topojson.v1.min.js'></script>
   <script>
+
     var width = 650;
     var height = 400;
 
@@ -36,17 +37,17 @@
       // var data = topojson.feature(world,world.objects.subunits);
       var data = world;
       var projection = d3.geoAlbers()
-        .center([38.7,-0.6])
-        .rotate([96,0,0])
-        .parallels([29.5,45.5])
+        .center([38.7, -0.6])
+        .rotate([96, 0, 0])
+        .parallels([29.5, 45.5])
         .scale(100)
-        .translate([480,250]);
+        .translate([480, 250]);
       var graticule = d3.geoGraticule();
       var path = d3.geoPath().projection(projection);
 
       svg.append('path')
         .datum(data)
-        .attr('d',path);
+        .attr('d', path);
 
       // svg.append('path')
       //   .datum(graticule)

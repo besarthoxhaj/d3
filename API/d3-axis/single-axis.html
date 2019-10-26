@@ -1,0 +1,29 @@
+<body>
+  <script src='https://d3js.org/d3.v5.min.js' charset='utf-8'></script>
+  <script>
+
+    var svgArea = { width: 400, height: 100 };
+    var data = [ 15, 4, 55, 31 ];
+
+    var dataMin = d3.min(data);
+    var dataMax = d3.max(data);
+
+    var xScale = d3.scaleLinear()
+      .domain([dataMin, dataMax])
+      .range([0, svgArea['width']]);
+
+    var xAxis = d3.axisBottom()
+      .scale(xScale)
+      .tickValues([ 5, 20, 30, 50 ])
+      .tickFormat(function(value, idx) {
+        return value + 's';
+      });
+
+    d3.select('body').append('svg')
+      .attr('width', svgArea['width'])
+      .attr('height', svgArea['height'])
+    .append('g')
+      .attr('transform', `translate(0, ${svgArea['height'] - 20})`)
+      .call(xAxis);
+  </script>
+</body>

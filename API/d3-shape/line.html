@@ -1,0 +1,38 @@
+<body>
+  <script src='https://d3js.org/d3.v5.min.js' charset='utf-8'></script>
+  <script>
+
+    var svgArea = { width: 400, height: 200 };
+
+    const svg = d3.select('body').append('svg')
+      .attr('width', svgArea['width'])
+      .attr('height', svgArea['height'])
+      .attr('style', 'border:.1px solid #dbdbdb');
+
+    var points = [ 0, 5, 7, 4, 2, 6, 10, 7, 8, 4];
+    var pointMax = d3.max(points);
+
+    var xScale = d3.scaleLinear()
+      .domain([0, points.length - 1])
+      .range([0, svgArea['width']]);
+
+    var yScale = d3.scaleLinear()
+      .domain([0, pointMax])
+      .range([svgArea['height'], 0]);
+
+    // var dPath = d3.line()
+    //   .x(function(data, idx) { return idx * 20; })
+    //   .y(function(data, idx) { return data * 10; })
+    // (points);
+
+    var dPath = d3.line()
+      .x((d, i) => xScale(i))
+      .y((d, i) => yScale(d))
+    (points);
+
+    svg.append('path')
+      .attr('stroke', 'steelblue')
+      .attr('fill', 'none')
+      .attr('d', dPath);
+  </script>
+</body>

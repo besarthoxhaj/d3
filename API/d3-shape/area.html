@@ -1,0 +1,35 @@
+<body>
+  <script src='https://d3js.org/d3.v5.min.js' charset='utf-8'></script>
+  <script>
+
+    var svgArea = { width: 400, height: 200 };
+
+    const svg = d3.select('body').append('svg')
+      .attr('width', svgArea['width'])
+      .attr('height', svgArea['height'])
+      .attr('style', 'border:.1px solid #dbdbdb');
+
+    var points = [ 0, 5, 7, 4, 2, 6, 10, 7, 8, 4];
+    var pointMax = d3.max(points);
+
+    var xScale = d3.scaleLinear()
+      .domain([0, points.length - 1])
+      .range([0, svgArea['width']]);
+
+    var yScale = d3.scaleLinear()
+      .domain([0, pointMax])
+      .range([svgArea['height'], 0]);
+
+    var area = d3.area()
+        .x((d, i) => xScale(i))
+        .y0(yScale(0))
+        .y1((d, i) => yScale(d));
+
+    var dPath = area(points);
+
+    svg.append('path')
+      .datum(points)
+      .attr('fill', 'steelblue')
+      .attr('d', dPath);
+  </script>
+</body>

@@ -15,8 +15,8 @@ var topoWorld = require('./data/topo_world.json');
 
 var writeFile = topojson.simplify(
   topojson.topology(
-    {collection:world},
-    {'property-transform':(obj) => obj.properties}
+    {collection: world},
+    {'property-transform': (obj) => obj.properties}
   ),
   {'minimum-area':1,'coordinate-system':'spherical'}
 );
@@ -26,15 +26,19 @@ var writeFile = topojson.simplify(
 // console.log(require('util').inspect(simpleTopoAruba,{depth:null}));
 
 fs.writeFileSync(
-  __dirname+'/data/simple_topo_world.json',
-  JSON.stringify(writeFile,null,'\t'),
-  {encoding:'utf-8'}
+  __dirname + '/data/simple_topo_world.json',
+  JSON.stringify(writeFile, null, '\t'),
+  {encoding: 'utf-8'}
 );
 
 fs.writeFileSync(
-  __dirname+'/data/simple_geo_world.json',
-  JSON.stringify(topojson.feature(writeFile,writeFile.objects.collection),null,'\t'),
-  {encoding:'utf-8'}
+  __dirname + '/data/simple_geo_world.json',
+  JSON.stringify(
+    topojson.feature(writeFile,writeFile.objects.collection),
+    null,
+    '\t'
+  ),
+  {encoding: 'utf-8'}
 );
 
 console.log('done');

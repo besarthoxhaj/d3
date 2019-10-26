@@ -1,0 +1,35 @@
+<body>
+  <script src='https://d3js.org/d3.v5.min.js' charset='utf-8'></script>
+  <script>
+
+    var svgArea = { width: 600, height: 300 };
+    var padding = 30;
+    var data = [ 0, 15, 4, 55, 31 ];
+
+    var dataMin = d3.min(data);
+    var dataMax = d3.max(data);
+
+    var xScale = d3.scaleLinear()
+      .domain([dataMin, dataMax])
+      .range([0, svgArea['width'] - padding * 2]);
+
+    var yScale = d3.scaleLinear()
+      .domain([dataMin, dataMax])
+      .range([svgArea['height'] - padding * 2, 0]);
+
+    var xAxis = d3.axisBottom().scale(xScale);
+    var yAxis = d3.axisLeft().scale(yScale);
+
+    var svg = d3.select('body').append('svg')
+      .attr('width', svgArea['width'])
+      .attr('height', svgArea['height']);
+
+    svg.append('g')
+      .attr('transform', `translate(${padding}, ${svgArea['height'] - padding})`)
+      .call(xAxis);
+
+    svg.append('g')
+      .attr('transform', `translate(${padding}, ${padding})`)
+      .call(yAxis);
+  </script>
+</body>

@@ -1,26 +1,28 @@
-## D3
-
+# D3
 
 **Drawing**
 
-D3 makes extensive use of Scalable Vector Graphics (SVG). You can find more at https://www.w3.org/TR/SVG11/. Worth noting that there are some SVG implementation version for mobile.
+D3 makes extensive use of Scalable Vector Graphics (SVG). You can find more at
+https://www.w3.org/TR/SVG11/. Worth noting that there are some SVG implementation
+version for mobile.
 
 For more about SVG check https://developer.mozilla.org/en-US/docs/Web/SVG.
 
 The coordinate system is this:
+
 ![svg-coordinate-system](/images/svg-coordinate-system.png)
 
 ```html
-<svg>
-<g>
-<d>
-<path>
-<!-- ... -->
+  <svg>
+  <g>
+  <d>
+  <path>
+  <!-- ... -->
 ```
 
 **[Position]()**
 ```
-[longitude,latitude,elevation]
+[longitude, latitude, elevation]
 
 longitude https://media1.britannica.com/eb-media/06/64906-004-55117002.jpg
   - are known as medidians (Greenwich)
@@ -44,14 +46,25 @@ latitude https://media1.britannica.com/eb-media/07/64907-004-870197D7.jpg
 
 **[GeoJSON]()**
 
-GeoJSON always consists of a single object, this object may represents either a `Geometry`, `Feature` or `Collection of Features`.
-Let's look at them:
+GeoJSON always consists of a single object, this object may represents either a
+`Geometry`, `Feature` or `Collection of Features`. Let's look at them:
 
 ```js
 // a Geometry is always:
 {
-  type:@String // -> ['Point','MultiPoint','LineString','MultiLineString','Polygon','MultiPolygon','GeometryCollection']
-  coordinates:@Array
+  /*
+    [
+      'Point',
+      'MultiPoint',
+      'LineString',
+      'MultiLineString',
+      'Polygon',
+      'MultiPolygon',
+      'GeometryCollection'
+    ]
+   */
+  type: @String
+  coordinates: @Array
 }
 ```
 
@@ -60,8 +73,8 @@ Let's look at them:
 ```js
 // with a single position, we can make the simplest geometry: the point.
 {
-  'type':'Point',
-  'coordinates':[0,0]
+  'type': 'Point',
+  'coordinates': [0, 0]
 }
 ```
 
@@ -70,8 +83,8 @@ Let's look at them:
 ```js
 // to represent a line, you’ll need at least two places to connect.
 {
-  'type':'LineString',
-  'coordinates':[[0,0],[10,10]]
+  'type': 'LineString',
+  'coordinates':[[0, 0], [10, 10]]
 }
 ```
 
@@ -83,7 +96,10 @@ Let's look at them:
   'type':'Polygon',
   'coordinates':[
     [
-      [0,0],[10,10],[10,0],[0,0]
+      [0, 0],
+      [10, 10],
+      [10, 0],
+      [0, 0]
     ]
   ]
 }
@@ -104,19 +120,22 @@ Let's look at them:
 
 ```js
 {
-  'type':'Feature',
-  'geometry':{
-    'type':'GeometryCollection',
-    'geometries':[{
-      'type':'Point',
-      'coordinates':[0,0]
-    },{
-      'type':'LineString',
-      'coordinates':[[0,0],[1,0]]
+  'type': 'Feature',
+  'geometry': {
+    'type': 'GeometryCollection',
+    'geometries': [{
+      'type': 'Point',
+      'coordinates': [0, 0]
+    }, {
+      'type': 'LineString',
+      'coordinates': [
+        [0,0],
+        [1,0]
+      ]
     }]
   },
-  'properties':{
-  'name':'null island'
+  'properties': {
+    'name': 'null island'
   }
 }
 ```
@@ -124,20 +143,21 @@ Let's look at them:
 **[FeatureCollection]()**
 ```js
 {
-  'type':'FeatureCollection',
-  'features':[@Feature]
+  'type': 'FeatureCollection',
+  'features': [@Feature]
 }
 ```
 
 **[Projections]()**
 
-Projections are function who maps spherical coordinates to one another set of coordinates in a two dimensional plane (projected coordinates).
+Projections are function who maps spherical coordinates to one another set of
+coordinates in a two dimensional plane (projected coordinates).
 
 ```js
 // Albers projection
 var albersProj = d3.geoAlbers();
-var london = [‎-0.118092,‎51.509865];
-albersProj(london); // [1447.4743359084398,-518.063483693071]
+var london = [‎-0.118092,‎ 51.509865];
+albersProj(london); // [1447.4743359084398, -518.063483693071]
 ```
 
 **[Paths](https://github.com/d3/d3-path)**
@@ -154,7 +174,14 @@ var geoJson = {
     'properties':null,
     'geometry':{
       'type':'Polygon',
-      'coordinates':[[[0,0],[50,50],[50,0],[0,0]]]
+      'coordinates':[
+        [
+          [0, 0],
+          [50, 50],
+          [50, 0],
+          [0, 0]
+        ]
+      ]
     }
   }]
 };
@@ -164,11 +191,10 @@ var pathString = path(geoJson); // 'M0,0L50,50L50,0Z'
 // view it
 d3.select('body')
   .append('svg')
-  .attr('width',200)
-  .attr('height',200)
+    .attr('width', 200)
+    .attr('height', 200)
   .append('path')
-  .attr('d',pathString);
-
+    .attr('d', pathString);
 ```
 
 **[Geo Paths]()**
@@ -183,37 +209,35 @@ var renderPath = d3.getPath()
 ```js
 d3.select('body')
   .append('svg')
-  .attr('width',width)
-  .attr('height',height)
+    .attr('width',width)
+    .attr('height',height)
   .append('g')
-  .selectAll('path')
-  .data(/* GeoJSON */)
-  .enter()
-  .append('path')
-  .attr('fill','#ccc')
-  .attr('d',d3.getPath().projection(d3.geoAlbers()))
+    .selectAll('path')
+    .data(/* GeoJSON */)
+    .enter()
+    .append('path')
+      .attr('fill','#ccc')
+      .attr('d',d3.getPath().projection(d3.geoAlbers()))
 ```
-
-
 
 ## Super simple examples
 
 ```js
 var line = {
-  'type':'LineString',
-  'coordinates':[
-    [-4.1397,50.3706],
-    [-43.2436,-22.9083],
-    [-67.2717,-55.9797],
-    [-149.4500,-17.6667],
-    [172.1936,-41.4395],
-    [151.1667,-34],
-    [147.70,-18.3],
-    [106.7,-6],
-    [18.4719,-34.3],
-    [-5,-15],
-    [-25.6,37.7],
-    [-4.1397,50.3706]
+  'type': 'LineString',
+  'coordinates': [
+    [-4.1397, 50.3706],
+    [-43.2436, -22.9083],
+    [-67.2717, -55.9797],
+    [-149.4500, -17.6667],
+    [172.1936, -41.4395],
+    [151.1667, -34],
+    [147.70, -18.3],
+    [106.7, -6],
+    [18.4719, -34.3],
+    [-5, -15],
+    [-25.6, 37.7],
+    [-4.1397, 50.3706]
   ]
 };
 ```
@@ -227,7 +251,9 @@ var line = {
 ## Tools
 
 [GDAL - Geospatial Data Abstraction Library](http://www.gdal.org/index.html)
-> GDAL is a translator library for raster and vector geospatial data formats that is released under an X/MIT style Open Source license by the Open Source Geospatial Foundation.
+> GDAL is a translator library for raster and vector geospatial data formats
+  that is released under an X/MIT style Open Source license by the Open Source
+  Geospatial Foundation.
 
 [GeoJSONLint](http://geojsonlint.com/)
 https://www.dashingd3js.com/
@@ -248,10 +274,12 @@ d3.select('body').style('background-color','black');
 ```
 
 **Dynamic properties**
-> [...] attributes, and other properties can be specified as functions of data in D3, not just simple constants.
+> [...] attributes, and other properties can be specified as functions of data
+  in D3, not just simple constants.
 
 ```js
-d3.selectAll('p').style('color', () => `hsl(${Math.random()*360},100%,50%)`);
+d3.selectAll('p')
+  .style('color', () => `hsl(${Math.random()*360},100%,50%)`);
 
 /**
  * Callback passed for each data point.
@@ -263,7 +291,8 @@ const simpleCallback = (d,i) => {
   return i % 2 ? '#fff' : '#eee';
 };
 
-d3.selectAll('p').style('color',simpleCallback);
+d3.selectAll('p')
+  .style('color', simpleCallback);
 
 // ------------
 
@@ -288,11 +317,16 @@ d3.select('body')
   .selectAll('p')
   .data([4, 8, 15, 16, 23, 42])
   .enter().append('p')
-  .text(d => `I’m number ${d}!`);
+    .text(d => `I’m number ${d}!`);
 ```
 
 **[Transitions](https://github.com/d3/d3-transition/blob/master/README.md)**
-> Transitions gradually interpolate styles and attributes over time [...] D3’s interpolators support both primitives, such as numbers and numbers embedded within strings (font sizes, path data, etc.), and compound values. You can even extend D3’s interpolator registry to support complex properties and data structures.
+
+> Transitions gradually interpolate styles and attributes over time [...] D3’s
+  interpolators support both primitives, such as numbers and numbers embedded
+  within strings (font sizes, path data, etc.), and compound values. You can
+  even extend D3’s interpolator registry to support complex properties and data
+  structures.
 
 ```js
 d3.select('body').transition()

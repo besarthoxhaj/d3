@@ -1,0 +1,48 @@
+<body>
+  <script src='https://d3js.org/d3.v5.min.js' charset='utf-8'></script>
+  <script>
+
+    var svgArea = { width: 400, height: 200 };
+
+    const svg = d3.select('body').append('svg')
+      .attr('width', svgArea['width'])
+      .attr('height', svgArea['height'])
+      .attr('style', 'border:.1px solid #dbdbdb');
+
+    var colors = {
+      a: 'rgb(255, 127, 14)',
+      b: 'rgb(31, 119, 180)'
+    };
+    var data = [
+      { a: 20, b: 10 },
+      { a: 50, b: 30 },
+      { a: 30, b: 60 },
+    ];
+
+    var stack = d3.stack().keys(['a', 'b'])(data);
+
+    var area = d3.area()
+      .x((d, i) => xScale(i))
+      .y0(d => yScale(d[0]))
+      .y1(d => yScale(d[1]));
+
+    var xScale = d3.scaleLinear()
+      .domain([0, data.length - 1])
+      .range([0, svgArea['width']]);
+
+    var yScale = d3.scaleLinear()
+      .domain([0, 100])
+      .range([svgArea['height'], 0]);
+
+    svg.append('g')
+      .selectAll('path')
+      .data(stack)
+      .join('path')
+        .attr('fill', function(currData) {
+          return colors[currData.key];
+        })
+        .attr('d', function(currData) {
+          return area(currData);
+        });
+  </script>
+</body>
