@@ -21,9 +21,9 @@
       .range([svgArea['height'], 0]);
 
     var area = d3.area()
-        .x((d, i) => xScale(i))
-        .y0(yScale(0))
-        .y1((d, i) => yScale(d));
+      .x((d, i) => xScale(i))
+      .y0(yScale(0))
+      .y1((d, i) => yScale(d));
 
     var dPath = area(points);
 

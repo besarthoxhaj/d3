@@ -1,0 +1,59 @@
+<body>
+  <script src='https://d3js.org/d3.v5.min.js' charset='utf-8'></script>
+  <script>
+
+    var svgArea = { width: 800, height: 400 };
+
+    const svg = d3.select('body').append('svg')
+      .attr('width', svgArea['width'])
+      .attr('height', svgArea['height'])
+      .attr('style', 'border:.1px solid #dbdbdb');
+
+    const tooltip = svg.append('g');
+    const circle = tooltip.append('circle')
+      .attr('fill', 'red')
+      .attr('r', 10);
+
+    var randomPoints = [ 0, 5, 7, 4, 2, 6, 10, 7, 8, 4];
+    var straightPoints = [0, 10];
+    var points = randomPoints;
+
+    var xScale = d3.scaleLinear()
+      .domain([0, points.length - 1])
+      .range([0, svgArea['width']]);
+
+    var yScale = d3.scaleLinear()
+      .domain([0, d3.max(points)])
+      .range([svgArea['height'], 0]);
+
+    var dataPath = d3.line()
+      .x((d, i) => xScale(i))
+      .y((d, i) => yScale(d))
+    (points);
+
+    var pathElm = svg.append('path')
+      .attr('stroke', 'steelblue')
+      .attr('fill', 'none')
+      .attr('d', dataPath);
+
+    var pathNode = pathElm.node();
+
+    svg.on('touchmove mousemove', function() {
+
+      var [ xPos, yPos ] = d3.mouse(this);
+
+      var xProj = pathNode.getPointAtLength(xPos)['x'];
+
+      var currLength = xPos;
+
+      while(xProj < xPos) {
+        currLength += 1;
+        xProj = pathNode.getPointAtLength(currLength)['x'];
+      }
+
+      var yProj = pathNode.getPointAtLength(currLength)['y'];
+
+      tooltip.attr('transform', `translate(${xProj}, ${yProj})`);
+    });
+  </script>
+</body>
