@@ -1,0 +1,129 @@
+<body>
+  <script src='https://d3js.org/d3.v5.min.js' charset='utf-8'></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/ramda/0.25.0/ramda.min.js"></script>
+  <script>
+
+    var svgArea = { width: 800, height: 400 };
+
+    const svg = d3.select('body').append('svg')
+      .attr('width', svgArea['width'])
+      .attr('height', svgArea['height'])
+      .attr('style', 'border:.1px solid #dbdbdb');
+
+    var colors = {
+      a: 'rgba(255, 127, 14, 0.8)',
+      b: 'rgba(31, 119, 180, 0.8)'
+    };
+
+    var points = [
+      {x: 0, y: { a: 1, b: 2 }},
+      {x: 1, y: { a: 2, b: 2 }},
+      {x: 2, y: { a: 1, b: 2 }},
+      {x: 3, y: { a: 4, b: 1 }},
+      {x: 4, y: { a: 2, b: 3 }},
+      {x: 5, y: { a: 3, b: 2 }},
+      {x: 6, y: { a: 1, b: 4 }},
+      {x: 7, y: { a: 2, b: 5 }},
+      {x: 8, y: { a: 2, b: 2 }},
+      {x: 9, y: { a: 3, b: 3 }},
+    ];
+
+    var xScale = d3.scaleLinear()
+      .domain([0, points.length - 1])
+      .range([0, svgArea['width']]);
+
+    var yScale = d3.scaleLinear()
+      .domain([0, 10])
+      .range([svgArea['height'], 0]);
+
+    var series = d3.stack()
+      .keys(['y.a', 'y.b'])
+      .value((data, key) => {
+        if(key.includes('a')) return data['y']['a'];
+        if(key.includes('b')) return data['y']['b'];
+      })(points);
+
+    var area = d3.area()
+      .x(d => xScale(d['data']['x']))
+      .y0(d => yScale(d[0]))
+      .y1(d => yScale(d[1]));
+
+    svg.append('g')
+      .selectAll('path')
+      .data(series)
+      .join('path')
+        .attr('id', currData => currData['key'])
+        .attr('d', currData => area(currData))
+        .attr('fill', function(currData) {
+          if(currData.key.includes('a')) return colors['a'];
+          if(currData.key.includes('b')) return colors['b'];
+        });
+
+    // const areaElm = svg.append('path')
+    //   .attr('fill', 'rgb(252, 120, 120, 0.8)');
+    //
+    // const tooltip = svg.append('g');
+    //
+    // const circleElm = tooltip.append('circle')
+    //   .attr('fill', 'red')
+    //   .attr('r', 5);
+
+    const verticalLineElm = svg.append('line')
+      .attr('stroke', 'red')
+      .attr('stroke-width', '.5')
+      .attr('y2', svgArea['height']);
+
+    // const horizontalLineElm = svg.append('line')
+    //   .attr('stroke', 'red')
+    //   .attr('stroke-width', '.5')
+    //   .attr('x2', svgArea['width']);
+
+    // var dataLinePath = d3.line()
+    //   .x(d => xScale(d[0]))
+    //   .y(d => yScale(d[1]))
+    // (points);
+    //
+    // // var pathElm = svg.append('path')
+    // //   .attr('stroke', 'steelblue')
+    // //   .attr('fill', 'none')
+    // //   .attr('d', dataLinePath);
+    //
+    // var pathElm = svg.insert('path', ':first-child')
+    //   .data(points)
+    //     .attr('fill', 'rgba(99, 172, 229, 0.8)')
+    //     .attr('d', dataAreaPath(points));
+
+    var a = document.getElementById('y.a');
+    var b = document.getElementById('y.b');
+
+    svg.on('touchmove mousemove', function() {
+
+      var [ xPos, yPos ] = d3.mouse(this);
+
+      verticalLineElm.attr('x1', xPos).attr('x2', xPos);
+
+      var xAProj = a.getPointAtLength(xPos)['x'];
+      var xBProj = b.getPointAtLength(xPos)['x'];
+      // var currLength = xPos;
+      // while(xProj < xPos) {
+      //   currLength += 1;
+      //   xProj = pathNode.getPointAtLength(currLength)['x'];
+      // }
+      var yAProj = a.getPointAtLength(xAProj)['y'];
+      var yBProj = b.getPointAtLength(xBProj)['y'];
+
+      console.log(`yAProj`, yAProj);
+      console.log(`yBProj`, yBProj);
+
+      // horizontalLineElm.attr('y1', yProj).attr('y2', yProj);
+      // tooltip.attr('transform', `translate(${xProj}, ${yProj})`);
+      //
+      // var xPosScaled = xScale.invert(xPos);
+      // var yPosScaled = yScale.invert(yProj);
+      // var areaPoints = points.slice(0, xPosScaled + 1);
+      // areaPoints.push([xPosScaled, yPosScaled]);
+      //
+      // areaElm.data(areaPoints).attr('d', dataAreaPath(areaPoints));
+    });
+  </script>
+</body>
