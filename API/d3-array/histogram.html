@@ -1,0 +1,43 @@
+<body>
+  <script src='https://d3js.org/d3.v5.min.js' charset='utf-8'></script>
+  <script>
+
+    var svgArea = { width: 400, height: 200 };
+
+    var svg = d3.select('body').append('svg')
+      .attr('width', svgArea.width)
+      .attr('height', svgArea.height)
+      .attr('style', 'border:.1px solid #dbdbdb');
+
+    var data = [
+      { period: 'Q2 2018', revenue: 15, profit: 10 },
+      { period: 'Q3 2018', revenue: 20, profit: 10 },
+      { period: 'Q4 2018', revenue: 25, profit: 13 },
+      { period: 'Q1 2019', revenue: 30, profit: 10 },
+      { period: 'Q2 2019', revenue: 10, profit: -5 },
+    ];
+
+    var maxY = d3.max(data, d => d3.max([d.revenue, d.profit]));
+    var minY = d3.min(data, d => d3.min([d.revenue, d.profit]));
+
+    console.log(`maxY`, maxY);
+    console.log(`minY`, minY);
+
+    var yScale = d3.scaleLinear()
+      .domain([minY, maxY])
+      .range([0, svgArea.height]);
+
+    var xScale = d3.scaleLinear()
+      .domain([0, data.length - 1])
+      .range([0, svgArea.width]);
+
+    var histogramRevenueFun = d3.histogram()
+      .domain(xScale.domain())
+      .value(d => d.revenue)
+      .thresholds(xScale.ticks(data.length - 1));
+
+    var bins = histogramRevenueFun(data);
+
+    console.log(`bins`, bins);
+  </script>
+</body>

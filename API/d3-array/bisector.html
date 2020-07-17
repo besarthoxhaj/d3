@@ -1,0 +1,24 @@
+<script src='https://d3js.org/d3.v5.min.js' charset='utf-8'></script>
+<script>
+
+  var data = [
+    { a: 00, b: 'aa', c: '2019-11-26' },
+    { a: 10, b: 'aa', c: '2019-11-25' },
+    { a: 20, b: 'bb', c: '2019-11-24' },
+    { a: 30, b: 'cc', c: '2019-11-23' },
+    { a: 40, b: 'dd', c: '2019-11-22' },
+    { a: 50, b: 'ee', c: '2019-11-21' },
+    { a: 60, b: 'ee', c: '2019-11-20' },
+    { a: 70, b: 'ee', c: '2019-11-19' },
+    { a: 80, b: 'ee', c: '2019-11-18' },
+  ];
+
+  var bisectOnA = d3.bisector(dataPoint => dataPoint.a);
+  var bisectOnC = d3.bisector(dataPoint => dataPoint.c);
+
+  var idxOnA = bisectOnA.right(data, 35);
+  var idxOnC = bisectOnC.right(data.reverse(), '2019-11-19');
+
+  console.log(`idxOnA`, idxOnA);
+  console.log(`idxOnC`, Math.abs(idxOnC - data.length));
+</script>
