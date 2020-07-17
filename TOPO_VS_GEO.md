@@ -1,23 +1,41 @@
 ## Geo and Topo formats
 
-What's the difference between [TopoJSON](https://github.com/mbostock/topojson/wiki) and [GeoJSON](http://geojson.org/)?
-> If you care about file size or topology, then use TopoJSON. If you don’t care about either, then use GeoJSON for simplicity’s sake.
+What's the difference between [TopoJSON](https://github.com/mbostock/topojson/wiki)
+and [GeoJSON](http://geojson.org/)?
+> If you care about file size or topology, then use TopoJSON. If you don’t care
+about either, then use GeoJSON for simplicity’s sake.
 
-What's [topology](https://en.wikipedia.org/wiki/Topology)? Is the same as [topography](https://en.wikipedia.org/wiki/Topography)?
+What's [topology](https://en.wikipedia.org/wiki/Topology)?
+Is the same as [topography](https://en.wikipedia.org/wiki/Topography)?
 
-> Topology (from the Greek τόπος, “place”, and λόγος, “study”) is a major area of mathematics concerned with spatial properties that are preserved under continuous deformations of objects, for example, deformations that involve stretching, but no tearing or gluing. It emerged through the development of concepts from geometry and set theory, such as space, dimension, and transformation.
+> Topology (from the Greek τόπος, “place”, and λόγος, “study”) is a major area
+of mathematics concerned with spatial properties that are preserved under continuous
+deformations of objects, for example, deformations that involve stretching, but no
+tearing or gluing. It emerged through the development of concepts from geometry and
+set theory, such as space, dimension, and transformation.
 
 more...
 
-> [...] in the world of topology, a doughnut and coffee cup are the same, since both are three dimensional objects with a hole going through them. Similarly, two adjacent polygons that share a common border will still share a common border even if the border is bent or distorted.
+> [...] in the world of topology, a doughnut and coffee cup are the same, since
+both are three dimensional objects with a hole going through them. Similarly,
+two adjacent polygons that share a common border will still share a common border
+even if the border is bent or distorted.
 
 On [topography](https://en.wikipedia.org/wiki/Topology):
 
-> From the Greek τόπος (topos, "place") and -γραφία (-graphia, "writing"). Topography is the study of the shape and features of the surface of the Earth and other observable astronomical objects including planets, moons, and asteroids. The topography of an area could refer to the surface shapes and features themselves, or a description (especially their depiction in maps).
+> From the Greek τόπος (topos, "place") and -γραφία (-graphia, "writing").
+Topography is the study of the shape and features of the surface of the Earth
+and other observable astronomical objects including planets, moons, and asteroids.
+The topography of an area could refer to the surface shapes and features
+themselves, or a description (especially their depiction in maps).
 
 On map [projections](https://en.wikipedia.org/wiki/Map_projection)):
 
-> [...] is a systematic transformation of the latitudes and longitudes of locations on the surface of a sphere or an ellipsoid into locations on a plane [...] any mathematical function transforming coordinates from the curved surface to the plane is a projection. Carl Friedrich Gauss's Theorema Egregium proved that a sphere's surface cannot be represented on a plane without distortion.
+> [...] is a systematic transformation of the latitudes and longitudes of
+locations on the surface of a sphere or an ellipsoid into locations on a
+plane [...] any mathematical function transforming coordinates from the curved
+surface to the plane is a projection. Carl Friedrich Gauss's Theorema Egregium
+proved that a sphere's surface cannot be represented on a plane without distortion.
 
 - [Raw api d3-geo](https://github.com/d3/d3-geo)
 - [More than you ever wanted to know about GeoJSON](http://www.macwright.org/2015/03/23/geojson-second-bite.html)
@@ -123,16 +141,19 @@ var topoAruba = {
 
 ## Data and tools
 
-Lot's of data are available through [Natural Earth website](http://www.naturalearthdata.com/). The most common type is called [shapefile](https://en.wikipedia.org/wiki/Shapefile).
+Lot's of data are available through [Natural Earth website](http://www.naturalearthdata.com/).
+The most common type is called [shapefile](https://en.wikipedia.org/wiki/Shapefile).
 
-The best way to interprete the data and manipulate them is through [ogr2ogr](http://www.gdal.org/ogr2ogr.html). Once installed it will make available to command lines `ogr2ogr` and `ogrinfo`.
+The best way to interprete the data and manipulate them is through [ogr2ogr](http://www.gdal.org/ogr2ogr.html).
+Once installed it will make available to command lines `ogr2ogr` and `ogrinfo`.
 
 ```sh
 # to get some help
 $ ogr2ogr --long-usage
 ```
 
-To get the file data: `ogrinfo -al ne_110m_land.shp`. This will print to stdout the file content. Following an example of how it may look like.
+To get the file data: `ogrinfo -al ne_110m_land.shp`. This will print to stdout
+the file content. Following an example of how it may look like.
 
 ```sh
 $ ogrinfo -al ne_110m_admin_0_countries.shp

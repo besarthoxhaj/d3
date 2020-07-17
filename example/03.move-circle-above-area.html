@@ -1,0 +1,29 @@
+<body>
+  <script src='https://d3js.org/d3.v5.min.js' charset='utf-8'></script>
+  <script>
+
+    var svgArea = { width: 800, height: 400 };
+
+    const svg = d3.select('body').append('svg')
+      .attr('width', svgArea['width'])
+      .attr('height', svgArea['height'])
+      .attr('style', 'border: .1px solid #dbdbdb');
+
+    const tooltip = svg.append('g').attr('style', 'visibility: hidden');
+    const circle = tooltip.append('circle')
+      .attr('fill', 'red')
+      .attr('r', 50);
+
+    svg.on('mousemove', function() {
+
+      var [ xPos, yPos ] = d3.mouse(this);
+      tooltip
+        .attr('transform', `translate(${xPos}, ${yPos})`)
+        .attr('style', 'visibility: visible');
+    });
+
+    svg.on('mouseleave', function() {
+      tooltip.attr('style', 'visibility: hidden');
+    });
+  </script>
+</body>
